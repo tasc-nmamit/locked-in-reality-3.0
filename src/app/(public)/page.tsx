@@ -1,69 +1,32 @@
-import Link from "next/link";
+"use client";
+import { useRouter } from "next/navigation";
+import { FaArrowRight } from "react-icons/fa6";
+import { Button } from "~/components/ui/button";
 
-import { LatestPost } from "~/app/_components/post";
-import { auth } from "~/server/auth";
-import { api, HydrateClient } from "~/trpc/server";
-
-export default async function Home() {
-  const hello = await api.post.hello({ text: "from tRPC" });
-  const session = await auth();
-
-  if (session?.user) {
-    void api.post.getLatest.prefetch();
-  }
+export default function Home() {
+  const router = useRouter();
 
   return (
-    <HydrateClient>
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
-          <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
-            Create <span className="text-[hsl(280,100%,70%)]">T3</span> App
-          </h1>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-            <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
-              href="https://create.t3.gg/en/usage/first-steps"
-              target="_blank"
-            >
-              <h3 className="text-2xl font-bold">First Steps →</h3>
-              <div className="text-lg">
-                Just the basics - Everything you need to know to set up your
-                database and authentication.
-              </div>
-            </Link>
-            <Link
-              className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
-              href="https://create.t3.gg/en/introduction"
-              target="_blank"
-            >
-              <h3 className="text-2xl font-bold">Documentation →</h3>
-              <div className="text-lg">
-                Learn more about Create T3 App, the libraries it uses, and how
-                to deploy it.
-              </div>
-            </Link>
-          </div>
-          <div className="flex flex-col items-center gap-2">
-            <p className="text-2xl text-white">
-              {hello ? hello.greeting : "Loading tRPC query..."}
-            </p>
-
-            <div className="flex flex-col items-center justify-center gap-4">
-              <p className="text-center text-2xl text-white">
-                {session && <span>Logged in as {session.user?.name}</span>}
-              </p>
-              <Link
-                href={session ? "/api/auth/signout" : "/api/auth/signin"}
-                className="rounded-full bg-white/10 px-10 py-3 font-semibold no-underline transition hover:bg-white/20"
-              >
-                {session ? "Sign out" : "Sign in"}
-              </Link>
-            </div>
-          </div>
-
-          {session?.user && <LatestPost />}
-        </div>
-      </main>
-    </HydrateClient>
+    <main className="pt-80">
+      <div className="h-fit bg-gradient-to-b from-purple-800 via-purple-300 to-purple-900 bg-clip-text">
+        <header className="font-rosca text-center text-8xl font-bold text-transparent">
+          Locked In <br /> Reality 3.0
+        </header>
+      </div>
+      <div>
+        <p className="text-white mx-auto font-medium text-xl max-w-xl text-center my-6">
+          Dive into world of mystery and adventure. Performe well and prove your might among the best.
+        </p>
+      </div>
+      <div className="mt-10 flex w-full justify-center gap-4">
+        <Button onClick={() => router.push("/rules")} className="rounded-full border-2 border-white/20 bg-gradient-to-r from-slate-950 to-slate-800 p-8 text-2xl hover:scale-110 transition-all duration-300">
+          Rules
+        </Button>
+        <Button onClick={() => router.push("/start")} className="rounded-full border-2 border-white/20 bg-gradient-to-r from-purple-900 via-purple-500 to-purple-600 p-8 pr-5 text-2xl hover:scale-110 transition-all duration-300">
+          Start
+          <FaArrowRight className="ml-2 size-10 animate-pulse" />
+        </Button>
+      </div>
+    </main>
   );
 }

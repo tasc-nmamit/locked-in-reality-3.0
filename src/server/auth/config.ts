@@ -1,5 +1,6 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { type DefaultSession, type NextAuthConfig } from "next-auth";
+import { type Role } from "@prisma/client";
+import type { User, DefaultSession, NextAuthConfig } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { comparePassword } from "~/lib/hashing";
 
@@ -15,6 +16,7 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
+      role: Role;
       // ...other properties
       // role: UserRole;
     } & DefaultSession["user"];
@@ -32,6 +34,10 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authConfig = {
+  session: {
+    strategy: "jwt",
+    maxAge: 7 * 24 * 60 * 60, // 7 days
+  },
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -43,12 +49,11 @@ export const authConfig = {
         },
         password: { label: "Password", type: "password" },
       },
-      // id: "creds_1",
 
       async authorize(credentials) {
         const data = {
-          email: credentials.email as string,
-          password: (credentials.password ?? "") as string,
+          email: credentials?.email,
+          password: credentials?.password as string,
         };
 
         if (data.email && data.password) {
@@ -67,7 +72,7 @@ export const authConfig = {
           );
 
           if (isCorrectPassword) {
-            return user;
+            return user as User;
           } else {
             return null;
           }
@@ -79,13 +84,34 @@ export const authConfig = {
   ],
   adapter: PrismaAdapter(db),
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+    jwt({ token, account, user, trigger}) {
+      
+      if(trigger === "signIn" && account?.provider === "credentials"){
+        if(user){
+          interface LocalUser extends User {
+            role: Role;
+          }
+
+          token.id = user.id;
+          token.email = user.email;
+          token.name = user.name;
+          token.image = user.image;
+          token.role = (user as LocalUser).role;
+        }
+      }
+
+      return token;
+    },
+    session: ({ session, token }) => {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id as string,
+          role: token.role as Role
+        },
+      }
+    }
   },
   pages: {
     signIn: "/auth/login",
