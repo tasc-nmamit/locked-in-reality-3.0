@@ -5,7 +5,7 @@ import { Button } from "~/components/ui/button";
 
 export default function SignOutPage() {
   return (
-    <div className="flex w-full max-w-xl flex-col space-y-4 rounded-lg border-2 p-4 py-8 bg-background">
+    <div className="flex w-full max-w-xl flex-col space-y-4 rounded-lg border-2 bg-background p-4 py-8">
       <h1 className="text-center text-2xl font-semibold">
         You can Logout here!
       </h1>

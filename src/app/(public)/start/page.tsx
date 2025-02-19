@@ -76,8 +76,8 @@ export default function StartPage() {
   ) {
     return (
       <main className="flex h-[calc(100vh-6rem)] w-full items-center justify-center">
-        <div className="flex items-center flex-col gap-6">
-          <h1 className="md:text-5xl text-3xl font-semibold text-white text-center">
+        <div className="flex flex-col items-center gap-6">
+          <h1 className="text-center text-3xl font-semibold text-white md:text-5xl">
             <span className="text-purple-500">
               Round{" "}
               {(appSettingsQuery.data.round1 && "1") ||
@@ -86,14 +86,15 @@ export default function StartPage() {
             has begun.
           </h1>
           <Button
-          onClick={() => {
-            if(appSettingsQuery.data?.round1){
-              router.push("/start/round1");
-            }else if(appSettingsQuery.data?.round2){
-              router.push("/start/round2")
-            }
-          }} 
-          className="rounded-full border-2 border-white/50 bg-gradient-to-r from-purple-900 via-purple-500 to-purple-600 px-4 py-6 w-fit">
+            onClick={() => {
+              if (appSettingsQuery.data?.round1) {
+                router.push("/start/round1");
+              } else if (appSettingsQuery.data?.round2) {
+                router.push("/start/round2");
+              }
+            }}
+            className="w-fit rounded-full border-2 border-white/50 bg-gradient-to-r from-purple-900 via-purple-500 to-purple-600 px-4 py-6"
+          >
             Start Round{" "}
             {(appSettingsQuery.data.round1 && "1") ||
               (appSettingsQuery.data.round2 && "2")}

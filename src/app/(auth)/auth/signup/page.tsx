@@ -62,7 +62,7 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="w-full max-w-2xl rounded-lg border-2 p-6 py-8 shadow-lg bg-background">
+    <div className="w-full max-w-2xl rounded-lg border-2 bg-background p-6 py-8 shadow-lg">
       <h1 className="text-center text-3xl font-semibold">Sign Up</h1>
       <div className="mx-auto mt-8 max-w-lg space-y-4">
         <Form {...form}>
