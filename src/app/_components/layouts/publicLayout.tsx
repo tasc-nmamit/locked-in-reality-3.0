@@ -32,13 +32,15 @@ export default function PublicLayout({
     >
       <Navbar />
       <Particles
-      init={particlesInit}
-      // @ts-expect-error Option_error
-      options={particlesConfig}
-      loaded={particlesLoaded}
-      className="absolute left-0 top-0 z-0 h-full w-full"
+        init={particlesInit}
+        // @ts-expect-error Option_error
+        options={particlesConfig}
+        loaded={particlesLoaded}
+        className="absolute left-0 top-0 z-0 h-full w-full"
       />
-      <div className="relative min-h-[calc(100vh-6rem)] w-screen">{children}</div>
+      <div className="relative min-h-[calc(100vh-6rem)] w-screen">
+        {children}
+      </div>
       <Footer />
     </div>
   );

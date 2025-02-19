@@ -66,7 +66,7 @@ export default function Navbar() {
         </div>
 
         <div
-          className={`absolute left-0 top-20 flex w-full flex-col gap-2 rounded-xl bg-purple-500/30 backdrop-blur-md text-center text-white transition-all duration-300 ${open ? "max-h-96 overflow-auto" : "max-h-0 overflow-hidden p-0"}`}
+          className={`absolute left-0 top-20 flex w-full flex-col gap-2 rounded-xl bg-purple-500/30 text-center text-white backdrop-blur-md transition-all duration-300 ${open ? "max-h-96 overflow-auto" : "max-h-0 overflow-hidden p-0"}`}
           style={{ transition: "max-height 0.3s ease-in-out" }}
         >
           <div className="flex flex-col justify-center gap-4 object-cover p-4">

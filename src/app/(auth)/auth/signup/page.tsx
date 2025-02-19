@@ -21,7 +21,7 @@ import { Eye, EyeClosed } from "lucide-react";
 import { api } from "~/trpc/react";
 import { toast } from "sonner";
 
-export default function SignUp() {
+export default function SignUpPage() {
   const [confirmPassword, setConfirmPassword] = React.useState("");
   const [show, setShow] = React.useState(false);
   const [showRe, setShowRe] = React.useState(false);
@@ -40,7 +40,7 @@ export default function SignUp() {
   const registerMutation = api.auth.register.useMutation({
     onSuccess: () => {
       toast.success("User Registered");
-      router.push("/");
+      router.push("/auth/login");
     },
     onError: (error) => {
       toast.error(error.message);
@@ -62,7 +62,7 @@ export default function SignUp() {
   }
 
   return (
-    <div className="w-full max-w-2xl rounded-lg border-2 p-6 py-8 shadow-lg">
+    <div className="w-full max-w-2xl rounded-lg border-2 p-6 py-8 shadow-lg bg-background">
       <h1 className="text-center text-3xl font-semibold">Sign Up</h1>
       <div className="mx-auto mt-8 max-w-lg space-y-4">
         <Form {...form}>

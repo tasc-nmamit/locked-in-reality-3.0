@@ -18,11 +18,12 @@ import {
 import { Input } from "~/components/ui/input";
 import { Eye, EyeClosed } from "lucide-react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
-export default function Login() {
+export default function LoginPage() {
   const [show, setShow] = React.useState(false);
   const router = useRouter();
+  const params = useSearchParams();
 
   const form = useForm<z.infer<typeof LoginSchemaZ>>({
     resolver: zodResolver(LoginSchemaZ),
@@ -42,12 +43,13 @@ export default function Login() {
     if (result?.error) {
       toast.error("Invalid login credentials. Please try again.");
     } else {
-      router.push("/");
+      const callbackUrl = params.get("callbackUrl");
+      router.push(callbackUrl ?? "/");
     }
   }
 
   return (
-    <div className="w-full max-w-2xl rounded-lg border-2 p-6 py-8 shadow-lg">
+    <div className="w-full max-w-2xl rounded-lg border-2 bg-white p-6 py-8 shadow-lg">
       <h1 className="text-center text-3xl font-semibold">Login</h1>
       <div className="mx-auto mt-8 w-full max-w-lg space-y-4">
         <Form {...form}>
