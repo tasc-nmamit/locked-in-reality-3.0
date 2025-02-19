@@ -5,6 +5,7 @@ import type { Container, Engine } from "tsparticles-engine";
 import { loadSlim } from "tsparticles-slim";
 import { useCallback } from "react";
 import Navbar from "~/app/_components/navbar/navbar";
+import Footer from "~/app/_components/footer/footer";
 
 export default function PublicLayout({
   children,
@@ -27,17 +28,18 @@ export default function PublicLayout({
   return (
     <div
       className="min-w-screen min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-950"
-      style={{ background: "url(/background.jpg)" }}
+      style={{ background: "url(/background.jpg) fixed" }}
     >
       <Navbar />
       <Particles
-        init={particlesInit}
-        // @ts-expect-error Option_error
-        options={particlesConfig}
-        loaded={particlesLoaded}
-        className="absolute left-0 top-0 z-0 h-full w-full"
+      init={particlesInit}
+      // @ts-expect-error Option_error
+      options={particlesConfig}
+      loaded={particlesLoaded}
+      className="absolute left-0 top-0 z-0 h-full w-full"
       />
-      <div className="relative">{children}</div>
+      <div className="relative min-h-[calc(100vh-6rem)] w-screen">{children}</div>
+      <Footer />
     </div>
   );
 }

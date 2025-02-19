@@ -30,10 +30,6 @@ export const navItems = [
     link: "/start",
   },
   {
-    name: "About",
-    link: "/about#about",
-  },
-  {
     name: "Leaderboard",
     link: "/leaderboard",
   },
@@ -70,10 +66,10 @@ export default function Navbar() {
         </div>
 
         <div
-          className={`absolute left-0 top-20 flex w-full flex-col gap-2 rounded-xl bg-white/30 text-center text-white transition-all duration-300 ${open ? "max-h-96 overflow-auto" : "max-h-0 overflow-hidden p-0"}`}
+          className={`absolute left-0 top-20 flex w-full flex-col gap-2 rounded-xl bg-purple-500/30 backdrop-blur-md text-center text-white transition-all duration-300 ${open ? "max-h-96 overflow-auto" : "max-h-0 overflow-hidden p-0"}`}
           style={{ transition: "max-height 0.3s ease-in-out" }}
         >
-          <div className="flex flex-col justify-center gap-2 object-cover p-2">
+          <div className="flex flex-col justify-center gap-4 object-cover p-4">
             {navItems.map((item, idx) => {
               return (
                 <Link
@@ -81,7 +77,10 @@ export default function Navbar() {
                   href={item.link}
                   className={cn(
                     `text-lg font-bold text-white`,
-                    pathname.match(item.link) ? "rounded-full border px-2" : "",
+                    // (pathname === "/" && item.link === "/") ||
+                    //   (item.link !== "/" ? pathname.match(item.link) : false)
+                    //   ? "rounded-full border px-2"
+                    //   : "",
                   )}
                 >
                   {item.name}
@@ -89,7 +88,7 @@ export default function Navbar() {
               );
             })}
           </div>
-          <div>
+          <div className="pb-4">
             {session.status === "unauthenticated" ? (
               <Button onClick={() => router.push("/auth/login")}>SignIn</Button>
             ) : (
@@ -126,7 +125,10 @@ function DestopNav() {
               href={item.link}
               className={cn(
                 `text-lg font-bold text-white`,
-                pathname.match(item.link) ? "rounded-full border px-2" : "",
+                (pathname === "/" && item.link === "/") ||
+                  (item.link !== "/" ? pathname.match(item.link) : false)
+                  ? "rounded-full border px-2"
+                  : "",
               )}
             >
               {item.name}

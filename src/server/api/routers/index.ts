@@ -1,3 +1,4 @@
 import { authRouter } from "./auth";
+import { settingsRouter } from "./settings";
 
-export { authRouter };
+export { authRouter, settingsRouter };

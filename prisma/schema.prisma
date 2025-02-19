@@ -77,6 +77,12 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
+model AppSettings{
+    id      Int @id @default(autoincrement())
+    round1  Boolean @default(false)
+    round2  Boolean @default(false)
+}
+
 enum Role{
     ADMIN
     USER

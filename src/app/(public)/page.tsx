@@ -9,22 +9,29 @@ export default function Home() {
   return (
     <main className="pt-80">
       <div className="h-fit bg-gradient-to-b from-purple-800 via-purple-300 to-purple-900 bg-clip-text">
-        <header className="font-rosca text-center text-8xl font-bold text-transparent">
+        <header className="text-center font-rosca md:text-8xl text-6xl font-bold text-transparent">
           Locked In <br /> Reality 3.0
         </header>
       </div>
       <div>
-        <p className="text-white mx-auto font-medium text-xl max-w-xl text-center my-6">
-          Dive into world of mystery and adventure. Performe well and prove your might among the best.
+        <p className="mx-auto my-6 max-w-xl text-center md:text-xl text-sm font-medium text-white">
+          Dive into world of mystery and adventure. Performe well and prove your
+          might among the best.
         </p>
       </div>
       <div className="mt-10 flex w-full justify-center gap-4">
-        <Button onClick={() => router.push("/rules")} className="rounded-full border-2 border-white/20 bg-gradient-to-r from-slate-950 to-slate-800 p-8 text-2xl hover:scale-110 transition-all duration-300">
+        <Button
+          onClick={() => router.push("/rules")}
+          className="rounded-full border-2 border-white/20 bg-gradient-to-r from-slate-950 to-slate-800 md:p-8 p-6 md:text-2xl text-xl transition-all duration-300 hover:scale-110"
+        >
           Rules
         </Button>
-        <Button onClick={() => router.push("/start")} className="rounded-full border-2 border-white/20 bg-gradient-to-r from-purple-900 via-purple-500 to-purple-600 p-8 pr-5 text-2xl hover:scale-110 transition-all duration-300">
+        <Button
+          onClick={() => router.push("/start")}
+          className="rounded-full border-2 border-white/20 bg-gradient-to-r from-purple-900 via-purple-500 to-purple-600 md:p-8 p-6 md:pr-5 pr-3 md:text-2xl text-xl transition-all duration-300 hover:scale-110"
+        >
           Start
-          <FaArrowRight className="ml-2 size-10 animate-pulse" />
+          <FaArrowRight className="md:ml-2 ml-0 md:size-10 size-6 animate-pulse" />
         </Button>
       </div>
     </main>

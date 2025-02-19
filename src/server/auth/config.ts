@@ -84,10 +84,9 @@ export const authConfig = {
   ],
   adapter: PrismaAdapter(db),
   callbacks: {
-    jwt({ token, account, user, trigger}) {
-      
-      if(trigger === "signIn" && account?.provider === "credentials"){
-        if(user){
+    jwt({ token, account, user, trigger }) {
+      if (trigger === "signIn" && account?.provider === "credentials") {
+        if (user) {
           interface LocalUser extends User {
             role: Role;
           }
@@ -108,10 +107,10 @@ export const authConfig = {
         user: {
           ...session.user,
           id: token.id as string,
-          role: token.role as Role
+          role: token.role as Role,
         },
-      }
-    }
+      };
+    },
   },
   pages: {
     signIn: "/auth/login",
