@@ -1,4 +1,4 @@
-export interface Round1{
+export interface Round1 {
   question: string;
   code: string;
   hint: string;
@@ -8,12 +8,12 @@ export interface Round1{
   options: {
     option: string;
     isCorrect: boolean;
-    code: boolean|null;
+    code: boolean | null;
     questionId: number;
   }[];
-};
+}
 
-export const Round1Details:Round1[] = [
+export const Round1Details: Round1[] = [
   {
     question: "What does the code do?",
     code: "print('Hello World!')",
@@ -31,7 +31,8 @@ export const Round1Details:Round1[] = [
     ],
   },
   {
-    question: "What is the output of the following code?\n\nconsole.log(2 + '2');",
+    question:
+      "What is the output of the following code?\n\nconsole.log(2 + '2');",
     code: "console.log(2 + '2');",
     hint: "JavaScript type coercion",
     level: 2,
@@ -115,7 +116,8 @@ export const Round1Details:Round1[] = [
     ],
   },
   {
-    question: "If a train travels 60 miles in 1 hour, how far will it travel in 3 hours?",
+    question:
+      "If a train travels 60 miles in 1 hour, how far will it travel in 3 hours?",
     code: "",
     hint: "Simple multiplication",
     level: 4,
@@ -143,15 +145,17 @@ export const Round1Details:Round1[] = [
     ],
   },
   {
-    question: "You have a 3-gallon jug and a 5-gallon jug. How do you measure out exactly 4 gallons?",
+    question:
+      "You have a 3-gallon jug and a 5-gallon jug. How do you measure out exactly 4 gallons?",
     code: "",
     hint: "Use both jugs to measure",
-    level:5,
+    level: 5,
     roundId: 1,
     maxPoints: 15,
     options: [
       {
-        option: "Fill the 5-gallon jug and pour into the 3-gallon jug until it is full. You have 2 gallons left in the 5-gallon jug. Empty the 3-gallon jug and pour the 2 gallons into it. Fill the 5-gallon jug again and pour into the 3-gallon jug until it is full. You now have exactly 4 gallons in the 5-gallon jug.",
+        option:
+          "Fill the 5-gallon jug and pour into the 3-gallon jug until it is full. You have 2 gallons left in the 5-gallon jug. Empty the 3-gallon jug and pour the 2 gallons into it. Fill the 5-gallon jug again and pour into the 3-gallon jug until it is full. You now have exactly 4 gallons in the 5-gallon jug.",
         isCorrect: true,
         code: null,
         questionId: 6,
@@ -163,7 +167,8 @@ export const Round1Details:Round1[] = [
         questionId: 6,
       },
       {
-        option: "Fill the 5-gallon jug and pour into the 3-gallon jug until it is full. You have 2 gallons left in the 5-gallon jug.",
+        option:
+          "Fill the 5-gallon jug and pour into the 3-gallon jug until it is full. You have 2 gallons left in the 5-gallon jug.",
         isCorrect: false,
         code: null,
         questionId: 6,
@@ -283,7 +288,8 @@ export const Round1Details:Round1[] = [
     ],
   },
   {
-    question: "What is the output of the following code?\n\nlet x = 10;\nconsole.log(x++);",
+    question:
+      "What is the output of the following code?\n\nlet x = 10;\nconsole.log(x++);",
     code: "let x = 10;\nconsole.log(x++);",
     hint: "Post-increment operator",
     level: 8,
@@ -311,7 +317,8 @@ export const Round1Details:Round1[] = [
     ],
   },
   {
-    question: "What is the next number in the Fibonacci sequence: 0, 1, 1, 2, 3, 5, ?",
+    question:
+      "What is the next number in the Fibonacci sequence: 0, 1, 1, 2, 3, 5, ?",
     code: "",
     hint: "Sum of the previous two numbers",
     level: 9,
@@ -339,7 +346,8 @@ export const Round1Details:Round1[] = [
     ],
   },
   {
-    question: "What is the output of the following code?\n\nconsole.log(typeof null);",
+    question:
+      "What is the output of the following code?\n\nconsole.log(typeof null);",
     code: "console.log(typeof null);",
     hint: "JavaScript type",
     level: 9,
@@ -367,7 +375,8 @@ export const Round1Details:Round1[] = [
     ],
   },
   {
-    question: "What is the value of x after the following code executes?\n\nlet x = 5;\nx += 3;",
+    question:
+      "What is the value of x after the following code executes?\n\nlet x = 5;\nx += 3;",
     code: "let x = 5;\nx += 3;",
     hint: "Addition assignment operator",
     level: 10,
@@ -394,85 +403,85 @@ export const Round1Details:Round1[] = [
       },
     ],
   },
-//   {
-//     question: "What is the output of the following code?\n\nconsole.log(0.1 + 0.2 === 0.3);",
-//     code: "console.log(0.1 + 0.2 === 0.3);",
-//     hint: "Floating-point precision",
-//     level: 6,
-//     roundId: 1,
-//     options: [
-//       {
-//         option: "false",
-//         isCorrect: true,
-//         code: null,
-//         questionId: 15,
-//       },
-//       {
-//         option: "true",
-//         isCorrect: false,
-//         code: null,
-//         questionId: 15,
-//       },
-//       {
-//         option: "undefined",
-//         isCorrect: false,
-//         code: null,
-//         questionId: 15,
-//       },
-//     ],
-//   },
-//   {
-//     question: "What is the output of the following code?\n\nconsole.log('5' - 3);",
-//     code: "console.log('5' - 3);",
-//     hint: "JavaScript type coercion",
-//     level: 7,
-//     roundId: 1,
-//     options: [
-//       {
-//         option: "2",
-//         isCorrect: true,
-//         code: null,
-//         questionId: 16,
-//       },
-//       {
-//         option: "8",
-//         isCorrect: false,
-//         code: null,
-//         questionId: 16,
-//       },
-//       {
-//         option: "NaN",
-//         isCorrect: false,
-//         code: null,
-//         questionId: 16,
-//       },
-//     ],
-//   },
-//   {
-//     question: "What is the output of the following code?\n\nconsole.log('5' + 3);",
-//     code: "console.log('5' + 3);",
-//     hint: "JavaScript type coercion",
-//     level: 8,
-//     roundId: 1,
-//     options: [
-//       {
-//         option: "53",
-//         isCorrect: true,
-//         code: null,
-//         questionId: 17,
-//       },
-//       {
-//         option: "8",
-//         isCorrect: false,
-//         code: null,
-//         questionId: 17,
-//       },
-//       {
-//         option: "NaN",
-//         isCorrect: false,
-//         code: null,
-//         questionId: 17,
-//       },
-//     ],
-//   },
+  //   {
+  //     question: "What is the output of the following code?\n\nconsole.log(0.1 + 0.2 === 0.3);",
+  //     code: "console.log(0.1 + 0.2 === 0.3);",
+  //     hint: "Floating-point precision",
+  //     level: 6,
+  //     roundId: 1,
+  //     options: [
+  //       {
+  //         option: "false",
+  //         isCorrect: true,
+  //         code: null,
+  //         questionId: 15,
+  //       },
+  //       {
+  //         option: "true",
+  //         isCorrect: false,
+  //         code: null,
+  //         questionId: 15,
+  //       },
+  //       {
+  //         option: "undefined",
+  //         isCorrect: false,
+  //         code: null,
+  //         questionId: 15,
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     question: "What is the output of the following code?\n\nconsole.log('5' - 3);",
+  //     code: "console.log('5' - 3);",
+  //     hint: "JavaScript type coercion",
+  //     level: 7,
+  //     roundId: 1,
+  //     options: [
+  //       {
+  //         option: "2",
+  //         isCorrect: true,
+  //         code: null,
+  //         questionId: 16,
+  //       },
+  //       {
+  //         option: "8",
+  //         isCorrect: false,
+  //         code: null,
+  //         questionId: 16,
+  //       },
+  //       {
+  //         option: "NaN",
+  //         isCorrect: false,
+  //         code: null,
+  //         questionId: 16,
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     question: "What is the output of the following code?\n\nconsole.log('5' + 3);",
+  //     code: "console.log('5' + 3);",
+  //     hint: "JavaScript type coercion",
+  //     level: 8,
+  //     roundId: 1,
+  //     options: [
+  //       {
+  //         option: "53",
+  //         isCorrect: true,
+  //         code: null,
+  //         questionId: 17,
+  //       },
+  //       {
+  //         option: "8",
+  //         isCorrect: false,
+  //         code: null,
+  //         questionId: 17,
+  //       },
+  //       {
+  //         option: "NaN",
+  //         isCorrect: false,
+  //         code: null,
+  //         questionId: 17,
+  //       },
+  //     ],
+  //   },
 ];
