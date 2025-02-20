@@ -95,7 +95,7 @@ export default function Round1() {
       }
       setNodes(filteredNodes);
       setEdges(newEdges);
-      console.log(filteredNodes, newEdges)
+      console.log(filteredNodes, newEdges);
     }
   }, [questionsQuery.data]);
 

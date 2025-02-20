@@ -403,88 +403,91 @@ export const Round1Details: Round1[] = [
       },
     ],
   },
-    {
-      question: "What is the output of the following code?\n\nconsole.log(0.1 + 0.2 === 0.3);",
-      code: "console.log(0.1 + 0.2 === 0.3);",
-      hint: "Floating-point precision",
-      level: 3,
-      roundId: 1,
-      maxPoints: 10,
-      options: [
-        {
-          option: "false",
-          isCorrect: true,
-          code: null,
-          questionId: 15,
-        },
-        {
-          option: "true",
-          isCorrect: false,
-          code: null,
-          questionId: 15,
-        },
-        {
-          option: "undefined",
-          isCorrect: false,
-          code: null,
-          questionId: 15,
-        },
-      ],
-    },
-    {
-      question: "What is the output of the following code?\n\nconsole.log('5' - 3);",
-      code: "console.log('5' - 3);",
-      hint: "JavaScript type coercion",
-      level: 5,
-      roundId: 1,
-      maxPoints: 5,
-      options: [
-        {
-          option: "2",
-          isCorrect: true,
-          code: null,
-          questionId: 16,
-        },
-        {
-          option: "8",
-          isCorrect: false,
-          code: null,
-          questionId: 16,
-        },
-        {
-          option: "NaN",
-          isCorrect: false,
-          code: null,
-          questionId: 16,
-        },
-      ],
-    },
-    {
-      question: "What is the output of the following code?\n\nconsole.log('5' + 3);",
-      code: "console.log('5' + 3);",
-      hint: "JavaScript type coercion",
-      level: 5,
-      roundId: 1,
-      maxPoints: 15,
-      options: [
-        {
-          option: "53",
-          isCorrect: true,
-          code: null,
-          questionId: 17,
-        },
-        {
-          option: "8",
-          isCorrect: false,
-          code: null,
-          questionId: 17,
-        },
-        {
-          option: "nan",
-          isCorrect: false,
-          code: null,
-          questionId: 17,
-        },
-      ],
-    },
+  {
+    question:
+      "What is the output of the following code?\n\nconsole.log(0.1 + 0.2 === 0.3);",
+    code: "console.log(0.1 + 0.2 === 0.3);",
+    hint: "Floating-point precision",
+    level: 3,
+    roundId: 1,
+    maxPoints: 10,
+    options: [
+      {
+        option: "false",
+        isCorrect: true,
+        code: null,
+        questionId: 15,
+      },
+      {
+        option: "true",
+        isCorrect: false,
+        code: null,
+        questionId: 15,
+      },
+      {
+        option: "undefined",
+        isCorrect: false,
+        code: null,
+        questionId: 15,
+      },
+    ],
+  },
+  {
+    question:
+      "What is the output of the following code?\n\nconsole.log('5' - 3);",
+    code: "console.log('5' - 3);",
+    hint: "JavaScript type coercion",
+    level: 5,
+    roundId: 1,
+    maxPoints: 5,
+    options: [
+      {
+        option: "2",
+        isCorrect: true,
+        code: null,
+        questionId: 16,
+      },
+      {
+        option: "8",
+        isCorrect: false,
+        code: null,
+        questionId: 16,
+      },
+      {
+        option: "NaN",
+        isCorrect: false,
+        code: null,
+        questionId: 16,
+      },
+    ],
+  },
+  {
+    question:
+      "What is the output of the following code?\n\nconsole.log('5' + 3);",
+    code: "console.log('5' + 3);",
+    hint: "JavaScript type coercion",
+    level: 5,
+    roundId: 1,
+    maxPoints: 15,
+    options: [
+      {
+        option: "53",
+        isCorrect: true,
+        code: null,
+        questionId: 17,
+      },
+      {
+        option: "8",
+        isCorrect: false,
+        code: null,
+        questionId: 17,
+      },
+      {
+        option: "nan",
+        isCorrect: false,
+        code: null,
+        questionId: 17,
+      },
+    ],
+  },
 ];

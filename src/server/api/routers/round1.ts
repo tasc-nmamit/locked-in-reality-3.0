@@ -11,23 +11,22 @@ export const round1Router = createTRPCRouter({
         .max(10),
     )
     .query(async ({ ctx, input }) => {
-        try {
-            return await ctx.db.question.findMany({
-                where: {
-                    level: {
-                        gte: 1,
-                        lte: input
-                    }
-                }
-            })
-        } catch (error) {
-            console.log(error);
-            throw new TRPCError({
-                code: "INTERNAL_SERVER_ERROR",
-                message: "Something went wrong while fetching questions",
-                cause: error,
-            })
-            
-        }
+      try {
+        return await ctx.db.question.findMany({
+          where: {
+            level: {
+              gte: 1,
+              lte: input,
+            },
+          },
+        });
+      } catch (error) {
+        console.log(error);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Something went wrong while fetching questions",
+          cause: error,
+        });
+      }
     }),
 });
