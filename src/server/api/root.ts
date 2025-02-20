@@ -9,6 +9,7 @@ import * as Routers from "~/server/api/routers";
 export const appRouter = createTRPCRouter({
   auth: Routers.authRouter,
   settings: Routers.settingsRouter,
+  round1: Routers.round1Router,
 });
 
 // export type definition of API

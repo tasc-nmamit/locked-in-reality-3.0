@@ -125,15 +125,14 @@ model Options {
 model Submission {
   id String @id @default(cuid())
 
-  isCorrect Boolean
-  points    Int
-  skipped   Boolean
+  points Int    @default(0)
+  status Status @default(PENDING)
 
   selectedOptionId String?
   selectedOption   Options? @relation(fields: [selectedOptionId], references: [id], onDelete: SetNull)
 
-  questionId String
-  question   Question @relation(fields: [questionId], references: [id], onDelete: SetDefault)
+  questionId String?
+  question   Question? @relation(fields: [questionId], references: [id], onDelete: SetNull)
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -142,4 +141,11 @@ model Submission {
 enum Role {
   ADMIN
   USER
+}
+
+enum Status {
+  PENDING
+  CORRECT
+  WRONG
+  SKIPPED
 }

@@ -7,12 +7,16 @@ const db = new PrismaClient();
 async function main() {
   console.log("Start seeding...");
 
-  await db.user.create({
-    data: {
-      email: "admin@incridea.lir.in",
-      password: await hashPassword("admin@123"),
-    },
-  });
+  try {
+    await db.user.create({
+      data: {
+        email: "admin@incridea.lir.in",
+        password: await hashPassword("admin@123"),
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
 
   const createdRound = await db.rounds.create({
     data: {
@@ -41,7 +45,11 @@ async function main() {
   console.log("Seeding finished.");
 }
 
-main().catch((e) => {
-  console.error(e);
-  process.exit(1);
-});
+await main()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .then(async () => {
+    await db.$disconnect();
+  });
