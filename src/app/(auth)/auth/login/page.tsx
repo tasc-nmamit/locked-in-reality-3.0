@@ -16,12 +16,10 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
-import { Eye, EyeClosed } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
 
 export default function LoginPage() {
-  const [show, setShow] = React.useState(false);
   const router = useRouter();
   const params = useSearchParams();
 
@@ -76,17 +74,7 @@ export default function LoginPage() {
                   <FormLabel>Password</FormLabel>
                   <FormControl>
                     <div className="flex flex-row">
-                      <Input {...field} type={show ? "text" : "password"} />
-                      <Button
-                        variant={"ghost"}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setShow(!show);
-                        }}
-                      >
-                        {show ? <Eye /> : <EyeClosed />}
-                      </Button>
+                      <Input {...field} type="password" />
                     </div>
                   </FormControl>
                   <FormMessage />

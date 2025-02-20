@@ -38,7 +38,6 @@ export const navItems = [
 export default function Navbar() {
   const session = useSession();
   const router = useRouter();
-  const pathname = usePathname();
 
   const [open, setOpen] = React.useState(false);
 
@@ -47,7 +46,7 @@ export default function Navbar() {
       <div className="relative mx-auto w-full max-w-7xl rounded-full bg-purple-500/30 p-4 px-8 backdrop-blur-sm">
         <div className="flex h-full w-full flex-row items-center justify-between">
           <div
-            className="h-fit w-fit bg-clip-text pr-2"
+            className="bg-clip-text pr-2"
             style={{
               backgroundImage: "url(/stone2.jpg)",
               backgroundSize: "fit",
@@ -56,9 +55,9 @@ export default function Navbar() {
           >
             <Link
               href={"/"}
-              className="pb-1 text-center font-rosca text-3xl font-extrabold text-transparent"
+              className="flex h-fit items-center justify-center text-center font-rosca text-3xl font-extrabold text-transparent"
             >
-              LIR 3.0
+              <p className="">LIR 3.0</p>
             </Link>
           </div>
           <DestopNav />
@@ -90,7 +89,9 @@ export default function Navbar() {
           </div>
           <div className="pb-4">
             {session.status === "unauthenticated" ? (
-              <Button onClick={() => router.push("/auth/login")}>SignIn</Button>
+              <Button onClick={() => router.push("/auth/login")}>
+                Sign In
+              </Button>
             ) : (
               <Button
                 onClick={() =>
@@ -123,23 +124,18 @@ function DestopNav() {
             <Link
               key={idx}
               href={item.link}
-              className={cn(
-                `text-lg font-bold text-white`,
-                (pathname === "/" && item.link === "/") ||
-                  (item.link !== "/" ? pathname.match(item.link) : false)
-                  ? "rounded-full border px-2"
-                  : "",
-              )}
+              className="group relative text-lg font-bold text-white"
             >
               {item.name}
               {/* {!pathname.match(item.link) && <div className="bg-white h-1 w-0"></div>} */}
+              <span className="absolute bottom-0 left-0 h-[2px] w-0 rounded-full bg-white transition-all duration-300 group-hover:w-full"></span>
             </Link>
           );
         })}
       </div>
       <div className="hidden md:flex">
         {session.status === "unauthenticated" ? (
-          <Button onClick={() => router.push("/auth/login")}>SignIn</Button>
+          <Button onClick={() => router.push("/auth/login")}>Sign In</Button>
         ) : (
           <Popover>
             <PopoverTrigger asChild>

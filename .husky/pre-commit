@@ -1,1 +1,1 @@
-bun run test:fix
+npm run test:fix

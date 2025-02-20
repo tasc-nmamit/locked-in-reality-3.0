@@ -1,10 +1,18 @@
 import { PrismaClient } from "@prisma/client";
 import { Round1Details } from "./seedData";
+import { hashPassword } from "~/lib/hashing";
 
 const db = new PrismaClient();
 
 async function main() {
   console.log("Start seeding...");
+
+  await db.user.create({
+    data: {
+      email: "admin@incridea.lir.in",
+      password: await hashPassword("admin@123"),
+    },
+  });
 
   const createdRound = await db.rounds.create({
     data: {

@@ -19,7 +19,10 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
-      <body className="bg-[#08073E]">
+      <body
+        className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-950 bg-cover bg-fixed bg-center"
+        style={{ backgroundImage: "url('/background.jpg')" }}
+      >
         <SessionProvider>
           <Toaster />
           <TRPCReactProvider>
