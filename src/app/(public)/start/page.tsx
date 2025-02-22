@@ -14,7 +14,7 @@ export default function StartPage() {
 
   if (session.status === "unauthenticated") {
     return (
-      <main className="flex h-[calc(100vh-6rem)] w-full items-center justify-center">
+      <main className="flex h-[calc(100vh)] w-full items-center justify-center">
         <div>
           <div className="bg-gradient-to-b from-slate-600 via-slate-300 to-slate-700 bg-clip-text">
             <h1 className="w-full text-center text-5xl font-bold text-transparent md:text-7xl lg:text-9xl">
@@ -38,7 +38,7 @@ export default function StartPage() {
 
   if (appSettingsQuery.isLoading) {
     return (
-      <main className="flex h-[calc(100vh-6rem)] w-full items-center justify-center">
+      <main className="flex h-[calc(100vh)] w-full items-center justify-center">
         <div>
           <div className="bg-gradient-to-b from-slate-600 via-slate-300 to-slate-700 bg-clip-text">
             <h1 className="w-full text-center text-lg font-bold text-transparent md:text-xl lg:text-2xl">
@@ -52,7 +52,7 @@ export default function StartPage() {
 
   if (appSettingsQuery.error) {
     return (
-      <main className="flex h-[calc(100vh-6rem)] w-full items-center justify-center">
+      <main className="flex h-[calc(100vh)] w-full items-center justify-center">
         <div>
           <div className="bg-gradient-to-b from-red-900 via-red-500 to-red-800 bg-clip-text">
             <h1 className="w-full text-center text-5xl font-bold text-transparent md:text-7xl lg:text-9xl">
@@ -75,7 +75,7 @@ export default function StartPage() {
     appSettingsQuery.data?.round2 === true
   ) {
     return (
-      <main className="flex h-[calc(100vh-6rem)] w-full items-center justify-center">
+      <main className="flex h-[calc(100vh)] w-full items-center justify-center">
         <div className="flex flex-col items-center gap-6">
           <h1 className="text-center text-3xl font-semibold text-white md:text-5xl">
             <span className="text-purple-500">
@@ -105,7 +105,7 @@ export default function StartPage() {
   }
 
   return (
-    <main className="flex h-[calc(100vh-6rem)] w-full items-center justify-center">
+    <main className="flex h-[calc(100vh)] w-full items-center justify-center">
       <div>
         <div className="bg-gradient-to-b from-slate-600 via-slate-300 to-slate-700 bg-clip-text">
           <h1 className="w-full text-center text-5xl font-bold text-transparent md:text-7xl lg:text-9xl">

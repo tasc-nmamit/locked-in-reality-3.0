@@ -7,16 +7,35 @@ const db = new PrismaClient();
 async function main() {
   console.log("Start seeding...");
 
-  try {
-    await db.user.create({
-      data: {
+  await db.$transaction(async (tx) => {
+    const user = await tx.user.findFirst({
+      where: {
         email: "admin@incridea.lir.in",
-        password: await hashPassword("admin@123"),
       },
     });
-  } catch (error) {
-    console.log(error);
-  }
+    if (!user) {
+      await tx.user.create({
+        data: {
+          email: "admin@incridea.lir.in",
+          password: await hashPassword("admin@123"),
+        },
+      });
+    }
+  });
+
+  await db.$transaction(async (tx) => {
+    const appSettings = await tx.appSettings.findFirst();
+    if (appSettings?.id) {
+      return;
+    } else {
+      await tx.appSettings.create({
+        data: {
+          round1: true,
+          round2: false,
+        },
+      });
+    }
+  });
 
   const createdRound = await db.rounds.create({
     data: {
@@ -25,10 +44,18 @@ async function main() {
       questions: {
         create: Round1Details.map((question) => ({
           question: question.question,
-          code: question.code,
           hint: question.hint,
           level: question.level,
           maxPoints: question.maxPoints,
+          tags: question.tags,
+          code: question.code
+            ? {
+                create: {
+                  code: question.code.code,
+                  language: question.code.language,
+                },
+              }
+            : undefined,
           options: {
             create: question.options.map((option) => ({
               option: option.option,

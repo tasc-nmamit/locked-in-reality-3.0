@@ -5,13 +5,16 @@ import { api } from "~/trpc/react";
 import { type Question } from "@prisma/client";
 import { createEdges, getCoordinates } from "~/lib/utils";
 import "@xyflow/react/dist/style.css";
+import { Button } from "~/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export interface Node {
   id: string;
-  data: { label: string; id: string };
+  data: { label: string | React.ReactNode; id: string };
   type: string;
   level: number;
   position: { x: number; y: number };
+  style: { backgroundColor: string };
 }
 
 export interface Edge {
@@ -54,24 +57,32 @@ export default function Round1() {
         );
 
       const filteredNodes: Array<Node> = [];
-      let counter = 1;
+
       for (let i = 1; i <= level; i++) {
         const currLevelNodes = nodesWithoutCoordinates.filter(
           (node: { id: string; level: number }) => node.level === i,
         );
         const coordinates = getCoordinates(i, currLevelNodes.length);
+
         for (let j = 0; j < currLevelNodes.length; j++) {
           filteredNodes.push({
             id: currLevelNodes[j]?.id ?? i.toString(),
             data: {
-              label: `Level ${i.toString()}`,
+              // label: `Level ${i.toString()}`,
+              // label: <Button>Hello world</Button>,
+              label: (
+                <NodeContents
+                  status={"unanswered"}
+                  id={currLevelNodes[j]?.id ?? i.toString()}
+                />
+              ),
               id: currLevelNodes[j]?.id ?? i.toString(),
             },
             type: i === 1 ? "input" : i === level ? "output" : "default",
             level: i,
             position: coordinates[j] ?? { x: 0, y: 0 },
+            style: { backgroundColor: "#1e3a8a" },
           });
-          counter++;
         }
       }
 
@@ -95,7 +106,6 @@ export default function Round1() {
       }
       setNodes(filteredNodes);
       setEdges(newEdges);
-      console.log(filteredNodes, newEdges);
     }
   }, [questionsQuery.data]);
 
@@ -104,4 +114,32 @@ export default function Round1() {
       <ReactFlow nodes={nodes} edges={edges} fitView />
     </main>
   );
+}
+
+function NodeContents({
+  status,
+  id,
+}: {
+  status: "correct" | "incorrect" | "unanswered";
+  id: string;
+}) {
+  const router = useRouter();
+
+  switch (status) {
+    case "correct":
+      return <Button disabled>Correct</Button>;
+    case "incorrect":
+      return <Button>Incorrect</Button>;
+    case "unanswered":
+      return (
+        <Button
+          onClick={() => {
+            router.push(`/start/round1/${id}`);
+          }}
+          className="bg-yellow-700 hover:bg-yellow-600"
+        >
+          Unanswered
+        </Button>
+      );
+  }
 }

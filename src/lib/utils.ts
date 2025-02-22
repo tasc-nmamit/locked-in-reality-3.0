@@ -8,11 +8,11 @@ export function cn(...inputs: ClassValue[]) {
 
 export function getCoordinates(level: number, count: number) {
   const coordinates = [];
-  const spacing = 200;
+  const spacing = 200; // Adjust spacing as needed
 
   for (let i = 0; i < count; i++) {
     const x = (i - (count - 1) / 2) * spacing;
-    const y = (level * 150);
+    const y = -(level * 100);
     coordinates.push({ x, y });
   }
 
@@ -27,10 +27,10 @@ export function createEdges(
   const edges = targetNodes.map((targetNode, index) => {
     const animated = animatedNodes.includes(targetNode);
     return {
-      id: `e${sourceNode}-${targetNode}`,
+      id: `${sourceNode}-${targetNode}-${index}`,
       source: sourceNode,
       target: targetNode,
-      animated: animated,
+      // animated: animated,
     } as Edge;
   });
 

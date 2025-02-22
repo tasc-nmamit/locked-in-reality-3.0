@@ -14,18 +14,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  createdBy   User   @relation(fields: [createdById], references: [id])
-  createdById String
-
-  @@index([name])
-}
-
 // Necessary for Next auth
 model Account {
   id                       String  @id @default(cuid())
@@ -66,7 +54,6 @@ model User {
   emailVerified DateTime?
   accounts      Account[]
   sessions      Session[]
-  posts         Post[]
 
   submissions Submission[]
 }
@@ -97,9 +84,13 @@ model Question {
   id String @id @default(cuid())
 
   question String
-  code     String?
-  hint     String?
-  options  Options[]
+
+  codeId String?
+  code   Code?   @relation(fields: [codeId], references: [id], onDelete: Cascade)
+
+  hint    String?
+  options Options[]
+  tags    String[]
 
   maxPoints Int
 
@@ -108,6 +99,14 @@ model Question {
   roundId     Int
   round       Rounds       @relation(fields: [roundId], references: [id], onDelete: Cascade)
   submissions Submission[]
+}
+
+model Code {
+  id String @id @default(cuid())
+
+  code     String
+  language String
+  Question Question[]
 }
 
 model Options {

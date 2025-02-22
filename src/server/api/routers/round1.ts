@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 
 export const round1Router = createTRPCRouter({
@@ -29,4 +29,33 @@ export const round1Router = createTRPCRouter({
         });
       }
     }),
+
+  getQuestionById: protectedProcedure
+    .input(z.string({ message: "Question Id is required" }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.db.question.findUnique({
+        where: { id: input },
+        select: {
+          id: true,
+          question: true,
+          code: true,
+          tags: true,
+          maxPoints: true,
+          level: true,
+          options: {
+            select: {
+              id: true,
+              option: true,
+              code: true,
+            }
+          }
+        }
+      });
+    }),
+
+  getAllQuestions: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.db.question.findMany({
+      select: { id: true },
+    });
+  }),
 });

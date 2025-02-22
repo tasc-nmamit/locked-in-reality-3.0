@@ -23,6 +23,15 @@
     "prepare": "husky",
     "test:fix": "next lint && tsc --noEmit && prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache"
   },
+  "lint-staged": {
+    "**/(*.ts|*.tsx)": [
+      "eslint",
+      "prettier --write --ignore-unknown --cache"
+    ],
+    "**/!(*.ts|*.tsx)": [
+      "prettier --write --ignore-unknown --cache"
+    ]
+  },
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.2",
     "@hookform/resolvers": "^4.0.0",

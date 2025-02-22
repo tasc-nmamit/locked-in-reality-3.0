@@ -1,6 +1,6 @@
 export interface Round1 {
   question: string;
-  code: string;
+  code: { code: string; language: string } | null;
   hint: string;
   level: number;
   roundId: number;
@@ -11,14 +11,15 @@ export interface Round1 {
     code: boolean | null;
     questionId: number;
   }[];
+  tags: string[];
 }
 
 export const Round1Details: Round1[] = [
   {
     question: "What does the code do?",
-    code: "print('Hello World!')",
+    code: { code: "print('Hello World!')", language: "python" },
     hint: "Prints a message to the console",
-    level: 1,
+    level: 2,
     roundId: 1,
     maxPoints: 10,
     options: [
@@ -29,13 +30,14 @@ export const Round1Details: Round1[] = [
         questionId: 1,
       },
     ],
+    tags: ["Python", "Basics"],
   },
   {
     question:
       "What is the output of the following code?\n\nconsole.log(2 + '2');",
-    code: "console.log(2 + '2');",
+    code: { code: "console.log(2 + '2');", language: "js" },
     hint: "JavaScript type coercion",
-    level: 2,
+    level: 1,
     roundId: 1,
     maxPoints: 5,
     options: [
@@ -58,10 +60,11 @@ export const Round1Details: Round1[] = [
         questionId: 2,
       },
     ],
+    tags: ["JavaScript", "Type Coercion"],
   },
   {
     question: "What is the next number in the sequence: 2, 3, 5, 7, 11, ?",
-    code: "",
+    code: null,
     hint: "Prime numbers",
     level: 3,
     roundId: 1,
@@ -86,10 +89,11 @@ export const Round1Details: Round1[] = [
         questionId: 3,
       },
     ],
+    tags: ["Math", "Prime Numbers"],
   },
   {
     question: "Decrypt the following cipher: Uifsf jt b tfdsfu nfttbhf",
-    code: "",
+    code: null,
     hint: "Caesar cipher with a shift of 1",
     level: 3,
     roundId: 1,
@@ -114,11 +118,12 @@ export const Round1Details: Round1[] = [
         questionId: 4,
       },
     ],
+    tags: ["Cryptography", "Caesar Cipher"],
   },
   {
     question:
       "If a train travels 60 miles in 1 hour, how far will it travel in 3 hours?",
-    code: "",
+    code: null,
     hint: "Simple multiplication",
     level: 4,
     roundId: 1,
@@ -143,11 +148,12 @@ export const Round1Details: Round1[] = [
         questionId: 5,
       },
     ],
+    tags: ["Math", "Multiplication"],
   },
   {
     question:
       "You have a 3-gallon jug and a 5-gallon jug. How do you measure out exactly 4 gallons?",
-    code: "",
+    code: null,
     hint: "Use both jugs to measure",
     level: 5,
     roundId: 1,
@@ -174,10 +180,11 @@ export const Round1Details: Round1[] = [
         questionId: 6,
       },
     ],
+    tags: ["Logic", "Puzzle"],
   },
   {
     question: "What is the time complexity of binary search?",
-    code: "",
+    code: null,
     hint: "Consider the number of comparisons",
     level: 5,
     roundId: 1,
@@ -202,10 +209,11 @@ export const Round1Details: Round1[] = [
         questionId: 7,
       },
     ],
+    tags: ["Algorithms", "Binary Search"],
   },
   {
     question: "Solve the puzzle: What has keys but can't open locks?",
-    code: "",
+    code: null,
     hint: "Think about a common object",
     level: 6,
     roundId: 1,
@@ -230,10 +238,11 @@ export const Round1Details: Round1[] = [
         questionId: 8,
       },
     ],
+    tags: ["Riddles", "Puzzles"],
   },
   {
     question: "What is the result of the following expression?\n\n5 + 3 * 2",
-    code: "",
+    code: null,
     hint: "Order of operations",
     level: 7,
     roundId: 1,
@@ -258,10 +267,11 @@ export const Round1Details: Round1[] = [
         questionId: 9,
       },
     ],
+    tags: ["Math", "Order of Operations"],
   },
   {
     question: "What is the missing number in the series: 1, 4, 9, 16, ?",
-    code: "",
+    code: null,
     hint: "Perfect squares",
     level: 7,
     roundId: 1,
@@ -286,11 +296,12 @@ export const Round1Details: Round1[] = [
         questionId: 10,
       },
     ],
+    tags: ["Math", "Perfect Squares"],
   },
   {
     question:
       "What is the output of the following code?\n\nlet x = 10;\nconsole.log(x++);",
-    code: "let x = 10;\nconsole.log(x++);",
+    code: { code: "let x = 10;\nconsole.log(x++);", language: "js" },
     hint: "Post-increment operator",
     level: 8,
     roundId: 1,
@@ -315,11 +326,12 @@ export const Round1Details: Round1[] = [
         questionId: 11,
       },
     ],
+    tags: ["JavaScript", "Post-Increment"],
   },
   {
     question:
       "What is the next number in the Fibonacci sequence: 0, 1, 1, 2, 3, 5, ?",
-    code: "",
+    code: null,
     hint: "Sum of the previous two numbers",
     level: 9,
     roundId: 1,
@@ -344,11 +356,12 @@ export const Round1Details: Round1[] = [
         questionId: 12,
       },
     ],
+    tags: ["Math", "Fibonacci Sequence"],
   },
   {
     question:
       "What is the output of the following code?\n\nconsole.log(typeof null);",
-    code: "console.log(typeof null);",
+    code: { code: "console.log(typeof null);", language: "js" },
     hint: "JavaScript type",
     level: 9,
     roundId: 1,
@@ -373,11 +386,12 @@ export const Round1Details: Round1[] = [
         questionId: 13,
       },
     ],
+    tags: ["JavaScript", "Type"],
   },
   {
     question:
       "What is the value of x after the following code executes?\n\nlet x = 5;\nx += 3;",
-    code: "let x = 5;\nx += 3;",
+    code: { code: "let x = 5;\nx += 3;", language: "js" },
     hint: "Addition assignment operator",
     level: 10,
     roundId: 1,
@@ -402,11 +416,12 @@ export const Round1Details: Round1[] = [
         questionId: 14,
       },
     ],
+    tags: ["JavaScript", "Operators"],
   },
   {
     question:
       "What is the output of the following code?\n\nconsole.log(0.1 + 0.2 === 0.3);",
-    code: "console.log(0.1 + 0.2 === 0.3);",
+    code: { code: "console.log(0.1 + 0.2 === 0.3);", language: "js" },
     hint: "Floating-point precision",
     level: 3,
     roundId: 1,
@@ -431,11 +446,12 @@ export const Round1Details: Round1[] = [
         questionId: 15,
       },
     ],
+    tags: ["JavaScript", "Floating-Point Precision"],
   },
   {
     question:
       "What is the output of the following code?\n\nconsole.log('5' - 3);",
-    code: "console.log('5' - 3);",
+    code: { code: "console.log('5' - 3);", language: "js" },
     hint: "JavaScript type coercion",
     level: 5,
     roundId: 1,
@@ -460,11 +476,12 @@ export const Round1Details: Round1[] = [
         questionId: 16,
       },
     ],
+    tags: ["JavaScript", "Type Coercion"],
   },
   {
     question:
       "What is the output of the following code?\n\nconsole.log('5' + 3);",
-    code: "console.log('5' + 3);",
+    code: { code: "console.log('5' + 3);", language: "js" },
     hint: "JavaScript type coercion",
     level: 5,
     roundId: 1,
@@ -489,5 +506,6 @@ export const Round1Details: Round1[] = [
         questionId: 17,
       },
     ],
+    tags: ["JavaScript", "Type Coercion"],
   },
 ];
