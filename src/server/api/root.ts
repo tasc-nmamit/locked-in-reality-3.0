@@ -10,6 +10,8 @@ export const appRouter = createTRPCRouter({
   auth: Routers.authRouter,
   settings: Routers.settingsRouter,
   round1: Routers.round1Router,
+  hint: Routers.hintRouter,
+  submission: Routers.submissionRouter,
 });
 
 // export type definition of API

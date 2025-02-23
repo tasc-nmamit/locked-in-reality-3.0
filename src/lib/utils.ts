@@ -12,7 +12,7 @@ export function getCoordinates(level: number, count: number) {
 
   for (let i = 0; i < count; i++) {
     const x = (i - (count - 1) / 2) * spacing;
-    const y = -(level * 100);
+    const y = (level * 100);
     coordinates.push({ x, y });
   }
 

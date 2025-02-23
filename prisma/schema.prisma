@@ -49,6 +49,8 @@ model User {
   password String?
   image    String? @default("https://github.com/shadcn.png")
 
+  round1 Int @default(1)
+
   role Role @default(USER)
 
   emailVerified DateTime?
@@ -117,24 +119,28 @@ model Options {
   isCorrect Boolean @default(false)
 
   questionId String
-  question   Question     @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  Submission Submission[]
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  // Submission Submission[]
 }
 
 model Submission {
   id String @id @default(cuid())
 
-  points Int    @default(0)
-  status Status @default(PENDING)
+  points   Int     @default(0)
+  status   Status  @default(PENDING)
+  hintUsed Boolean @default(false)
 
   selectedOptionId String?
-  selectedOption   Options? @relation(fields: [selectedOptionId], references: [id], onDelete: SetNull)
+  // selectedOption   Options? @relation(fields: [selectedOptionId], references: [id], onDelete: SetNull)
 
   questionId String?
   question   Question? @relation(fields: [questionId], references: [id], onDelete: SetNull)
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum Role {
@@ -144,7 +150,6 @@ enum Role {
 
 enum Status {
   PENDING
-  CORRECT
-  WRONG
+  SUBMITTED
   SKIPPED
 }

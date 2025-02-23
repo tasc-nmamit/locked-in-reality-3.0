@@ -2,11 +2,12 @@
 import { useEffect, useState } from "react";
 import { ReactFlow } from "@xyflow/react";
 import { api } from "~/trpc/react";
-import { type Question } from "@prisma/client";
+import type { Status, Question } from "@prisma/client";
 import { createEdges, getCoordinates } from "~/lib/utils";
 import "@xyflow/react/dist/style.css";
 import { Button } from "~/components/ui/button";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export interface Node {
   id: string;
@@ -27,21 +28,17 @@ export interface Edge {
 export default function Round1() {
   const [nodes, setNodes] = useState<Array<Node>>([]);
   const [edges, setEdges] = useState<Array<Edge>>([]);
-  const [level, setLevel] = useState(1);
-  const questionsQuery = api.round1.getQuestionsByCurrentLevel.useQuery(level);
+  const session = useSession();
+  const questionsQuery = api.round1.getQuestionsByCurrentLevel.useQuery(
+    session.data?.user.round1 ?? 1,
+  );
+  const submissionsQuery = api.submission.getSubmissions.useQuery();
 
   useEffect(() => {
-    if (typeof window !== undefined) {
-      const currentLevel = window.localStorage.getItem("Round1Level");
-      if (currentLevel) {
-        setLevel(parseInt(currentLevel));
-      }
-      void questionsQuery.refetch();
-    }
-  }, []);
+    // set level
+    const level = session.data?.user.round1 ?? 1;
 
-  useEffect(() => {
-    if (questionsQuery.data) {
+    if (questionsQuery.data && submissionsQuery.data) {
       const nodesWithoutCoordinates = questionsQuery.data
         .map((question: Question) => {
           return {
@@ -58,6 +55,13 @@ export default function Round1() {
 
       const filteredNodes: Array<Node> = [];
 
+      const levelQuestions = questionsQuery.data.filter((question) => {
+        return question.level === level;
+      })
+      const isCurrentLevelStarted = submissionsQuery.data.some((submission) => {
+        return submission.status === "PENDING" && levelQuestions.some((question) => question.id === submission.questionId)
+      })
+
       for (let i = 1; i <= level; i++) {
         const currLevelNodes = nodesWithoutCoordinates.filter(
           (node: { id: string; level: number }) => node.level === i,
@@ -65,14 +69,16 @@ export default function Round1() {
         const coordinates = getCoordinates(i, currLevelNodes.length);
 
         for (let j = 0; j < currLevelNodes.length; j++) {
+          const nodeStatus = submissionsQuery.data.find(
+            (submission) => submission.questionId === currLevelNodes[j]?.id,
+          );
+
           filteredNodes.push({
             id: currLevelNodes[j]?.id ?? i.toString(),
             data: {
-              // label: `Level ${i.toString()}`,
-              // label: <Button>Hello world</Button>,
               label: (
                 <NodeContents
-                  status={"unanswered"}
+                  status={nodeStatus?.status ?? (i === level ? (isCurrentLevelStarted ? "SKIPPED" : "PENDING") : "SKIPPED")}
                   id={currLevelNodes[j]?.id ?? i.toString()}
                 />
               ),
@@ -107,7 +113,7 @@ export default function Round1() {
       setNodes(filteredNodes);
       setEdges(newEdges);
     }
-  }, [questionsQuery.data]);
+  }, [questionsQuery.data, submissionsQuery.data]);
 
   return (
     <main className="h-screen w-screen">
@@ -116,27 +122,25 @@ export default function Round1() {
   );
 }
 
-function NodeContents({
-  status,
-  id,
-}: {
-  status: "correct" | "incorrect" | "unanswered";
-  id: string;
-}) {
+function NodeContents({ status, id }: { status: Status; id: string }) {
   const router = useRouter();
 
   switch (status) {
-    case "correct":
-      return <Button disabled>Correct</Button>;
-    case "incorrect":
-      return <Button>Incorrect</Button>;
-    case "unanswered":
+    case "SKIPPED":
+      return <Button variant={"outline"} disabled>Skipped</Button>;
+    case "SUBMITTED":
+      return (
+        <Button disabled className="bg-green-700 disabled:opacity-80">
+          Submitted
+        </Button>
+      );
+    case "PENDING":
       return (
         <Button
           onClick={() => {
             router.push(`/start/round1/${id}`);
           }}
-          className="bg-yellow-700 hover:bg-yellow-600"
+          variant={"default"}
         >
           Unanswered
         </Button>

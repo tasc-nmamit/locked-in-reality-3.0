@@ -2,6 +2,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { type Role } from "@prisma/client";
 import type { User, DefaultSession, NextAuthConfig } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { env } from "~/env";
 import { comparePassword } from "~/lib/hashing";
 
 import { db } from "~/server/db";
@@ -17,6 +18,7 @@ declare module "next-auth" {
     user: {
       id: string;
       role: Role;
+      round1: number;
       // ...other properties
       // role: UserRole;
     } & DefaultSession["user"];
@@ -38,6 +40,7 @@ export const authConfig = {
     strategy: "jwt",
     maxAge: 7 * 24 * 60 * 60, // 7 days
   },
+  trustHost: true,
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -49,6 +52,8 @@ export const authConfig = {
         },
         password: { label: "Password", type: "password" },
       },
+      id: "credentials",
+      type: "credentials",
 
       async authorize(credentials) {
         const data = {
@@ -67,12 +72,11 @@ export const authConfig = {
 
           const isCorrectPassword = await comparePassword(
             data.password,
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             user.password ?? "",
           );
 
           if (isCorrectPassword) {
-            return user as User;
+            return user;
           } else {
             return null;
           }
@@ -83,32 +87,59 @@ export const authConfig = {
     }),
   ],
   adapter: PrismaAdapter(db),
+  secret: env.AUTH_SECRET,
   callbacks: {
-    jwt({ token, account, user, trigger }) {
-      if (trigger === "signIn" && account?.provider === "credentials") {
-        if (user) {
-          interface LocalUser extends User {
-            role: Role;
-          }
+    jwt: async ({ token, user, trigger }) => {
+      // update token with user data
+      if (trigger === "update" && token.sub) {
+        const dbUser = await db.user.findFirst({
+          where: { id: token.sub },
+        });
 
-          token.id = user.id;
-          token.email = user.email;
-          token.name = user.name;
-          token.image = user.image;
-          token.role = (user as LocalUser).role;
+        token = {
+          ...token,
+          picture: dbUser?.image,
+          role: dbUser?.role,
+          round1: dbUser?.round1,
+        };
+      } else if (user) {
+        interface LocalUser extends User {
+          role: Role;
+          round1: number;
         }
+
+        // populate token with user data when signin
+        token = {
+          ...token,
+          name: user.name,
+          email: user.email,
+          picture: user.image,
+          role: (user as LocalUser).role,
+          round1: (user as LocalUser).round1,
+        };
       }
 
       return token;
     },
-    session: ({ session, token }) => {
+
+    session: ({ token, session }) => {
+      // augment session with user data
+      if (session && session.user) {
+        interface LocalToken {
+          role: Role;
+          round1: number;
+        }
+
+        session.user.id = token.sub ?? "";
+        session.user.role = (token as unknown as LocalToken).role;
+        session.user.round1 = (token as unknown as LocalToken).round1;
+      }
+      
       return {
         ...session,
         user: {
           ...session.user,
-          id: token.id as string,
-          role: token.role as Role,
-        },
+        }
       };
     },
   },

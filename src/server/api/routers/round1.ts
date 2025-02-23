@@ -47,9 +47,9 @@ export const round1Router = createTRPCRouter({
               id: true,
               option: true,
               code: true,
-            }
-          }
-        }
+            },
+          },
+        },
       });
     }),
 

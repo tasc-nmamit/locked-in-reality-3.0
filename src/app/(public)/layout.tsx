@@ -24,7 +24,7 @@ export default function RootLayout({
         style={{ backgroundImage: "url('/background.jpg')" }}
       >
         <SessionProvider>
-          <Toaster />
+          <Toaster richColors/>
           <TRPCReactProvider>
             <PublicLayout>{children}</PublicLayout>
           </TRPCReactProvider>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 
 export default function AuthLayout({
   children,
@@ -10,7 +10,7 @@ export default function AuthLayout({
       className="min-w-screen flex min-h-screen items-center justify-center"
       style={{ background: "url(/background.jpg)" }}
     >
-      {children}
+      <Suspense>{children}</Suspense>
     </div>
   );
 }

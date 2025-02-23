@@ -23,7 +23,7 @@ export default function RootLayout({
       <body>
         <SessionProvider>
           <TRPCReactProvider>
-            <Toaster />
+            <Toaster richColors/>
             <AuthLayout>
               <Navbar />
               {children}
