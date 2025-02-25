@@ -10,6 +10,7 @@ export default {
       fontFamily: {
         sans: ["var(--font-geist-sans)", ...fontFamily.sans],
         rosca: ["Rosca", "serif"],
+        thunder: ["Thunder", "serif"],
       },
       borderRadius: {
         lg: "var(--radius)",

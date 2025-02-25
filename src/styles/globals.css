@@ -72,6 +72,11 @@
   src: url("/font/rosca.otf") format("opentype");
 }
 
+@font-face {
+  font-family: "Thunder";
+  src: url("/font/thunder.ttf") format("truetype");
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

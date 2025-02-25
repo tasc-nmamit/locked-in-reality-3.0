@@ -1,8 +1,8 @@
 import { CreateSubmissionZ, UpdateSubmissionZ } from "~/zod/schema";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
-import { auth } from "~/server/auth";
 import { z } from "zod";
+import { env } from "~/env";
 
 export const submissionRouter = createTRPCRouter({
   createSubmission: protectedProcedure
@@ -99,9 +99,9 @@ export const submissionRouter = createTRPCRouter({
             where: { id: ctx.session.user.id },
             data: {
               round1:
-                ctx.session.user.round1 + 1 <= 10
+                ctx.session.user.round1 + 1 <= env.TOTAL_ROUNDS
                   ? ctx.session.user.round1 + 1
-                  : 10,
+                  : 1,
             },
           });
         });

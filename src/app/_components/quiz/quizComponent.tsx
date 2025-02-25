@@ -97,6 +97,8 @@ export default function QuizComponent({
 
   if (question === null) return;
 
+  // TODO: start and end time
+  // TODO: sprite game to show remaining time
   return (
     <section className="flex min-h-screen w-screen items-center justify-center">
       <div className="mt-16 flex flex-col items-center justify-center gap-6">
@@ -155,7 +157,6 @@ export default function QuizComponent({
                 updateSubmissionMutation.mutate(
                   UpdateSubmissionZ.parse({
                     questionId: question.id,
-                    // TODO: send correct option id
                     selectedOptionId: selecetedOption,
                   }),
                 );
@@ -168,7 +169,6 @@ export default function QuizComponent({
           </div>
         </div>
         <div className="w-full rounded-lg bg-purple-500/40 p-6 text-2xl text-white backdrop-blur">
-          {/* TODO: implement selecting correct option */}
           <RadioGroup
             onValueChange={(id) => {
               // Hint: here id refrers to the value of the radio item

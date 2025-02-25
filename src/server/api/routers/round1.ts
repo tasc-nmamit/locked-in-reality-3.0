@@ -6,9 +6,8 @@ export const round1Router = createTRPCRouter({
   getQuestionsByCurrentLevel: protectedProcedure
     .input(
       z
-        .number({ message: "Level must be in the range of 1 to 10 only" })
-        .min(1)
-        .max(10),
+        .number({ message: "Level must be greater than or equal to 1" })
+        .min(1),
     )
     .query(async ({ ctx, input }) => {
       try {
