@@ -60,4 +60,39 @@ export const round1Router = createTRPCRouter({
       select: { id: true },
     });
   }),
+
+  validateRound1Answer: publicProcedure.query(async ({ ctx }) => {
+    const allUsers = await ctx.db.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        submissions: {
+          select: {
+            id: true,
+            status: true,
+            points: true,
+            hintUsed: true,
+          },
+        },
+      },
+    });
+
+    const result = allUsers.map((user) => {
+      const totalPoints = user.submissions.reduce((acc, submission) => {
+        const currPoints =
+          submission.status === "SUBMITTED" ? submission.points : 0;
+        const afterHint =
+          submission.status === "SUBMITTED" && submission.hintUsed ? -5 : 0;
+        return acc + currPoints + afterHint;
+      }, 0);
+
+      return {
+        ...user,
+        totalPoints: totalPoints,
+      };
+    });
+
+    return result.sort((a, b) => b.totalPoints - a.totalPoints);
+  }),
 });

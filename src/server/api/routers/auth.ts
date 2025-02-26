@@ -1,7 +1,12 @@
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 import { RegisterSchemaZ } from "~/zod/schema";
 import { TRPCError } from "@trpc/server";
 import { hashPassword } from "~/lib/hashing";
+import { z } from "zod";
 
 export const authRouter = createTRPCRouter({
   register: publicProcedure
@@ -52,5 +57,23 @@ export const authRouter = createTRPCRouter({
           cause: error,
         });
       }
+    }),
+
+  addTeam: protectedProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      const teamName = input.trim().toLowerCase().replace(" ", "-");
+      const teamEmail = teamName + "@incridea.lir.in";
+      const hashedPassword = await hashPassword(teamName);
+
+      const user = await ctx.db.user.create({
+        data: {
+          name: teamName,
+          email: teamEmail,
+          password: hashedPassword,
+        },
+      });
+
+      return user;
     }),
 });

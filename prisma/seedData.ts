@@ -423,7 +423,7 @@ int main() {
       },
       {
         option: "false",
-        isCorrect: false,
+        isCorrect: true, // Corrected
         code: null,
         questionId: 8,
       },

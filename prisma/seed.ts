@@ -8,7 +8,7 @@ async function main() {
   console.log("Start seeding...");
 
   await db.$transaction(async (tx) => {
-    for (const user of ["admin", "team1", "team2", "team3", "team4", "team5"]) {
+    for (const user of ["team1", "team2", "team3", "team4", "team5"]) {
       await tx.user.create({
         data: {
           email: user + "@incridea.lir.in",
@@ -16,6 +16,14 @@ async function main() {
         },
       });
     }
+
+    await tx.user.create({
+      data: {
+        email: "admin@incridea.lir.in",
+        password: await hashPassword("admin@123"),
+        role: "ADMIN",
+      },
+    });
   });
 
   await db.$transaction(async (tx) => {

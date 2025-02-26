@@ -5,6 +5,7 @@ import type { Container, Engine } from "tsparticles-engine";
 import { loadSlim } from "tsparticles-slim";
 import { useCallback } from "react";
 import Navbar from "~/app/_components/navbar/navbar";
+import Round1Dialog from "../round1Dialog/round1Dialog";
 
 export default function PublicLayout({
   children,
@@ -34,7 +35,10 @@ export default function PublicLayout({
         loaded={particlesLoaded}
         className="absolute left-0 top-0 z-0 h-full w-full"
       />
-      <div className="relative h-screen w-screen">{children}</div>
+      <div className="relative h-screen w-screen">
+        <Round1Dialog />
+        {children}
+      </div>
     </div>
   );
 }
