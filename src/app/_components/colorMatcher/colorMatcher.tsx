@@ -13,15 +13,18 @@ import {
   DialogTrigger,
 } from "~/components/ui/dialog";
 import { toast } from "sonner";
+import RickAshley from "../trolls/rick-ashley";
 
 const THRESHOLD = 5;
 
-export default function ColorMatcher() {
+export default function ColorMatcher({ trollUser }: { trollUser: boolean }) {
   const [open, setOpen] = useState(false);
   const [red, setRed] = useState(0);
   const [green, setGreen] = useState(0);
   const [blue, setBlue] = useState(0);
   const [hintUsed, setHintUsed] = useState(false);
+  const [trolled, setTrolled] = useState(false);
+
   const [targetColor, setTargetColor] = useState({
     red: 255,
     green: 255,
@@ -61,16 +64,25 @@ export default function ColorMatcher() {
   }, [red, green, blue]);
 
   function handleUseHint() {
+    if (!trollUser) {
+      // TODO: api for hint
+    }
     setHintUsed(true);
     setOpen(false);
   }
 
   function handleSubmit() {
+    if (trollUser) {
+      // TODO: show troll page
+      setTrolled(true);
+    }
+
     if (
       isWithinThreshold(red, targetColor.red) &&
       isWithinThreshold(green, targetColor.green) &&
       isWithinThreshold(blue, targetColor.blue)
     ) {
+      // TODO: api for submission
       console.log("Matched within threshold");
     }
     if (
@@ -95,6 +107,10 @@ export default function ColorMatcher() {
         toast.message("Not matched");
       }
     }
+  }
+
+  if (trolled) {
+    return <RickAshley />;
   }
 
   return (
