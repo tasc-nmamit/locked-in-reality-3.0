@@ -31,6 +31,10 @@ export const submissionRouter = createTRPCRouter({
                 questionId: input.questionId,
               },
             },
+            round1:
+              ctx.session.user.round1 + 1 <= env.TOTAL_ROUNDS
+                ? ctx.session.user.round1 + 1
+                : env.TOTAL_ROUNDS,
           },
         });
 
@@ -95,15 +99,15 @@ export const submissionRouter = createTRPCRouter({
             },
           });
 
-          await tx.user.update({
-            where: { id: ctx.session.user.id },
-            data: {
-              round1:
-                ctx.session.user.round1 + 1 <= env.TOTAL_ROUNDS
-                  ? ctx.session.user.round1 + 1
-                  : 1,
-            },
-          });
+          // await tx.user.update({
+          //   where: { id: ctx.session.user.id },
+          //   data: {
+          //     round1:
+          //       ctx.session.user.round1 + 1 <= env.TOTAL_ROUNDS
+          //         ? ctx.session.user.round1 + 1
+          //         : 1,
+          //   },
+          // });
         });
 
         return {
@@ -122,15 +126,35 @@ export const submissionRouter = createTRPCRouter({
   checkSubmission: protectedProcedure
     .input(z.string({ message: "Question Id is required" }))
     .query(async ({ ctx, input }) => {
-      return await ctx.db.submission.findFirst({
+      let submission = await ctx.db.submission.findFirst({
         where: {
           userId: ctx.session.user.id,
           questionId: input,
         },
         select: {
+          id: true,
           status: true,
+          createdAt: true,
+          updatedAt: true,
         },
       });
+
+      if (
+        submission?.createdAt &&
+        Date.now() - new Date(submission.createdAt).getTime() > 3 * 60 * 1000 &&
+        submission.status === "PENDING"
+      ) {
+        submission = await ctx.db.submission.update({
+          where: {
+            id: submission.id,
+          },
+          data: {
+            status: "SKIPPED",
+          },
+        });
+      }
+
+      return submission;
     }),
 
   getSubmissions: protectedProcedure.query(async ({ ctx }) => {

@@ -1,13 +1,12 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
+import { env } from "~/env";
 
 export const round1Router = createTRPCRouter({
   getQuestionsByCurrentLevel: protectedProcedure
     .input(
-      z
-        .number({ message: "Level must be greater than or equal to 1" })
-        .min(1),
+      z.number({ message: "Level must be greater than or equal to 1" }).min(1),
     )
     .query(async ({ ctx, input }) => {
       try {
@@ -15,7 +14,12 @@ export const round1Router = createTRPCRouter({
           where: {
             level: {
               gte: 1,
-              lte: input,
+              lte:
+                input === 1
+                  ? 1
+                  : input + 1 >= env.TOTAL_ROUNDS
+                    ? input
+                    : input + 1,
             },
           },
         });
@@ -38,7 +42,6 @@ export const round1Router = createTRPCRouter({
           id: true,
           question: true,
           code: true,
-          tags: true,
           maxPoints: true,
           level: true,
           options: {

@@ -8,6 +8,7 @@ import "@xyflow/react/dist/style.css";
 import { Button } from "~/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 
 export interface Node {
   id: string;
@@ -55,13 +56,6 @@ export default function Round1() {
 
       const filteredNodes: Array<Node> = [];
 
-      const levelQuestions = questionsQuery.data.filter((question) => {
-        return question.level === level;
-      })
-      const isCurrentLevelStarted = submissionsQuery.data.some((submission) => {
-        return submission.status === "PENDING" && levelQuestions.some((question) => question.id === submission.questionId)
-      })
-
       for (let i = 1; i <= level; i++) {
         const currLevelNodes = nodesWithoutCoordinates.filter(
           (node: { id: string; level: number }) => node.level === i,
@@ -69,17 +63,13 @@ export default function Round1() {
         const coordinates = getCoordinates(i, currLevelNodes.length);
 
         for (let j = 0; j < currLevelNodes.length; j++) {
-          const nodeStatus = submissionsQuery.data.find(
-            (submission) => submission.questionId === currLevelNodes[j]?.id,
-          );
-
           filteredNodes.push({
             id: currLevelNodes[j]?.id ?? i.toString(),
             data: {
               label: (
                 <NodeContents
-                  status={nodeStatus?.status ?? (i === level ? (isCurrentLevelStarted ? "SKIPPED" : "PENDING") : "SKIPPED")}
                   id={currLevelNodes[j]?.id ?? i.toString()}
+                  level={i}
                 />
               ),
               id: currLevelNodes[j]?.id ?? i.toString(),
@@ -113,7 +103,7 @@ export default function Round1() {
       setNodes(filteredNodes);
       setEdges(newEdges);
     }
-  }, [questionsQuery.data, submissionsQuery.data]);
+  }, [questionsQuery.data, submissionsQuery.data, session.data?.user.round1]);
 
   return (
     <main className="h-screen w-screen">
@@ -122,28 +112,88 @@ export default function Round1() {
   );
 }
 
-function NodeContents({ status, id }: { status: Status; id: string }) {
+function NodeContents({ id, level }: { id: string; level: number }) {
   const router = useRouter();
+  const session = useSession();
+  const submission = api.submission.checkSubmission.useQuery(id, {
+    staleTime: 1000 * 3,
+  });
 
-  switch (status) {
+  switch (submission.data?.status) {
     case "SKIPPED":
-      return <Button variant={"outline"} disabled>Skipped</Button>;
+      return (
+        <div>
+          <Image
+            alt="red door"
+            src="/red-door.png"
+            width={100}
+            height={100}
+            className="mx-auto w-20 opacity-70"
+          />
+          <p className="text-lg font-semibold text-white">{level}</p>
+        </div>
+      );
     case "SUBMITTED":
       return (
-        <Button disabled className="bg-green-700 disabled:opacity-80">
-          Submitted
-        </Button>
+        <div>
+          <Image
+            alt="closed door"
+            src="/closed.png"
+            width={100}
+            height={100}
+            className="mx-auto w-20 opacity-70"
+          />
+          <p className="text-lg font-semibold text-white">{level}</p>
+        </div>
       );
     case "PENDING":
       return (
-        <Button
+        <button
           onClick={() => {
             router.push(`/start/round1/${id}`);
           }}
-          variant={"default"}
         >
-          Unanswered
-        </Button>
+          <Image
+            alt="open door"
+            src="/open.png"
+            width={100}
+            height={100}
+            className="w-24"
+          />
+          <p className="text-lg font-semibold text-white">{level}</p>
+        </button>
       );
+    default:
+      if (session.data?.user.round1 === level) {
+        return (
+          <button
+            onClick={() => {
+              router.push(`/start/round1/${id}`);
+            }}
+          >
+            <Image
+              alt="closed door"
+              src="/closed.png"
+              width={100}
+              height={100}
+              className="w-20"
+            />
+            <p className="text-lg font-semibold text-white">{level}</p>
+          </button>
+        );
+      } else {
+        return (
+          <div>
+            <Image
+              alt="red door"
+              src="/red-door.png"
+              width={100}
+              height={100}
+              className="mx-auto w-20 opacity-70"
+            />
+            <p className="text-lg font-semibold text-white">{level}</p>
+          </div>
+        );
+      }
   }
 }

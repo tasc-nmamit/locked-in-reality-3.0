@@ -59,6 +59,7 @@ CREATE TABLE "AppSettings" (
     "id" SERIAL NOT NULL,
     "round1" BOOLEAN NOT NULL DEFAULT false,
     "round2" BOOLEAN NOT NULL DEFAULT false,
+    "round1Start" TIMESTAMP(3),
 
     CONSTRAINT "AppSettings_pkey" PRIMARY KEY ("id")
 );
@@ -77,7 +78,6 @@ CREATE TABLE "Question" (
     "question" TEXT NOT NULL,
     "codeId" TEXT,
     "hint" TEXT,
-    "tags" TEXT[],
     "maxPoints" INTEGER NOT NULL,
     "level" INTEGER NOT NULL DEFAULT 1,
     "roundId" INTEGER NOT NULL,
@@ -120,6 +120,39 @@ CREATE TABLE "Submission" (
     CONSTRAINT "Submission_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Location" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+
+    CONSTRAINT "Location_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "QRCode" (
+    "id" TEXT NOT NULL,
+    "code" INTEGER,
+    "order" INTEGER,
+    "hint" TEXT,
+    "teamId" TEXT,
+    "locationId" TEXT NOT NULL,
+    "progressId" TEXT,
+
+    CONSTRAINT "QRCode_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Progress" (
+    "id" TEXT NOT NULL,
+    "completed" BOOLEAN NOT NULL DEFAULT false,
+    "teamId" TEXT NOT NULL,
+    "qrCodeId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Progress_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Account_provider_providerAccountId_key" ON "Account"("provider", "providerAccountId");
 
@@ -134,6 +167,9 @@ CREATE UNIQUE INDEX "VerificationToken_token_key" ON "VerificationToken"("token"
 
 -- CreateIndex
 CREATE UNIQUE INDEX "VerificationToken_identifier_token_key" ON "VerificationToken"("identifier", "token");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Progress_qrCodeId_key" ON "Progress"("qrCodeId");
 
 -- AddForeignKey
 ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -155,3 +191,15 @@ ALTER TABLE "Submission" ADD CONSTRAINT "Submission_questionId_fkey" FOREIGN KEY
 
 -- AddForeignKey
 ALTER TABLE "Submission" ADD CONSTRAINT "Submission_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "QRCode" ADD CONSTRAINT "QRCode_teamId_fkey" FOREIGN KEY ("teamId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "QRCode" ADD CONSTRAINT "QRCode_locationId_fkey" FOREIGN KEY ("locationId") REFERENCES "Location"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Progress" ADD CONSTRAINT "Progress_teamId_fkey" FOREIGN KEY ("teamId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Progress" ADD CONSTRAINT "Progress_qrCodeId_fkey" FOREIGN KEY ("qrCodeId") REFERENCES "QRCode"("id") ON DELETE CASCADE ON UPDATE CASCADE;

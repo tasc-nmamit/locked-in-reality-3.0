@@ -12,7 +12,7 @@ async function main() {
       await tx.user.create({
         data: {
           email: user + "@incridea.lir.in",
-          password: await hashPassword(user+"@123"),
+          password: await hashPassword(user + "@123"),
         },
       });
     }
@@ -41,8 +41,7 @@ async function main() {
           question: question.question,
           hint: question.hint,
           level: question.level,
-          maxPoints: question.maxPoints,
-          tags: question.tags,
+          maxPoints: 10,
           code: question.code
             ? {
                 create: {

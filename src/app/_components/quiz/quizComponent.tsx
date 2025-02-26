@@ -1,6 +1,6 @@
 "use client";
 import type { inferRouterOutputs } from "@trpc/server";
-import type { round1Router } from "~/server/api/routers";
+import type { round1Router, submissionRouter } from "~/server/api/routers";
 import React, { useEffect, useState } from "react";
 import { api } from "~/trpc/react";
 import {
@@ -8,7 +8,7 @@ import {
   Round1HintZ,
   UpdateSubmissionZ,
 } from "~/zod/schema";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 import { CodeRenderBlock } from "../codeBlock/CodeRenderer";
 import { Label } from "~/components/ui/label";
@@ -26,16 +26,22 @@ import {
 } from "~/components/ui/dialog";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
+import { Badge } from "~/components/ui/badge";
 
 export default function QuizComponent({
   question,
+  submission,
 }: {
   question: inferRouterOutputs<typeof round1Router>["getQuestionById"];
+  submission: inferRouterOutputs<typeof submissionRouter>["checkSubmission"];
 }) {
   const [hintDialog, setHintDialog] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [selecetedOption, setSelectedOption] = useState<string | null>(null);
   const { refetch } = api.submission.getSubmissions.useQuery();
+  const checkSubmission = api.submission.checkSubmission.useQuery(
+    question?.id ?? "",
+  );
   const { update } = useSession();
 
   const router = useRouter();
@@ -43,37 +49,41 @@ export default function QuizComponent({
     questionId: question?.id ?? "",
   });
   const createSubmissionMutation = api.submission.createSubmission.useMutation({
-    onSuccess: async() => {
+    onSuccess: async () => {
       console.log("Submission created");
-      await refetch()
+      await update({
+        round1: (question?.level ?? 1 + 1).toString(),
+      });
+      void checkSubmission.refetch();
     },
     onError(error) {
       console.log(error.message);
     },
   });
   const hintMutation = api.hint.useRound1Hint.useMutation({
-    onSuccess: async(data) => {
+    onSuccess: async (data) => {
       await hintQuery.refetch();
-      toast.dismiss("hint")
+      toast.dismiss("hint");
       toast.success(data.message);
     },
     onError(error) {
       toast.error(error.message);
     },
     onMutate() {
-      toast.loading("Loading Hint...",{
-        id: "hint"
-      })
+      toast.loading("Loading Hint...", {
+        id: "hint",
+      });
       setHintDialog(false);
     },
   });
   const updateSubmissionMutation = api.submission.updateSubmission.useMutation({
-    onSuccess: async() => {
+    onSuccess: async () => {
       toast.success("Answer submitted successfully");
-      await update({
-        round1: (question?.level ?? 1 + 1).toString(),
-      });
+      // await update({
+      //   round1: (question?.level ?? 1 + 1).toString(),
+      // });
       await refetch();
+      await checkSubmission.refetch();
       router.push("/start/round1");
     },
     onError(error) {
@@ -97,13 +107,21 @@ export default function QuizComponent({
 
   if (question === null) return;
 
+  if (submission && submission?.createdAt.getTime() + 180000 < Date.now()) {
+    // toast.warning("Time's up! Redirecting to next question");
+    redirect("/start/round1");
+  }
+
   // TODO: start and end time
   // TODO: sprite game to show remaining time
   return (
     <section className="flex min-h-screen w-screen items-center justify-center">
-      <div className="mt-16 flex flex-col items-center justify-center gap-6">
+      <div className="mt-16 flex max-w-7xl flex-col items-center justify-center gap-6">
         <div className="flex flex-col gap-4 rounded-lg bg-purple-500/40 p-8 text-2xl text-white backdrop-blur">
-          <h1>{question.question}</h1>
+          <div className="flex items-center justify-center gap-4">
+            <h1 className="text-wrap">{question.question}</h1>
+            <Timer time={checkSubmission.data?.createdAt.toString() ?? ""} />
+          </div>
           {question.code && (
             <CodeRenderBlock
               code={question.code.code}
@@ -207,5 +225,33 @@ export default function QuizComponent({
         </div>
       </div>
     </section>
+  );
+}
+
+function Timer({ time }: { time: string }) {
+  const [timeLeft, setTimeLeft] = useState<number | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!time) return;
+
+    const interval = setInterval(() => {
+      const timeElapsed = Math.floor(
+        (Date.now() - new Date(time).getTime()) / 1000,
+      );
+
+      if (timeElapsed - 180 === 0) {
+        router.push("/start/round1");
+      }
+      setTimeLeft(Math.max(0, 180 - timeElapsed));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [time]);
+
+  return (
+    <Badge className="flex min-w-20 justify-center text-lg">
+      {timeLeft !== null ? `${timeLeft}s` : "Loading..."}
+    </Badge>
   );
 }

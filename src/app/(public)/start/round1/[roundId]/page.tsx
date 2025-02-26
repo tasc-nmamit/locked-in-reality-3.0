@@ -68,9 +68,8 @@ export default async function RoundQuiz({
   return (
     <HydrateClient>
       <main className="min-h-screen w-screen">
-        <QuizComponent question={question} />
+        <QuizComponent question={question} submission={checkSubmission} />
       </main>
-      ;
     </HydrateClient>
   );
 }
