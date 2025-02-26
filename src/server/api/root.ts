@@ -10,6 +10,7 @@ export const appRouter = createTRPCRouter({
   auth: Routers.authRouter,
   settings: Routers.settingsRouter,
   round1: Routers.round1Router,
+  round2: Routers.round2Router,
   hint: Routers.hintRouter,
   submission: Routers.submissionRouter,
 });

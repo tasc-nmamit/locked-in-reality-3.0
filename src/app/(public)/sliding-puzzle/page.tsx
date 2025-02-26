@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import { useState, useEffect, FC } from "react";
 
 interface SlidingImagePuzzleProps {
   imageUrl: string;
@@ -9,13 +8,13 @@ interface SlidingImagePuzzleProps {
   height?: number;
 }
 
-const SlidingImagePuzzle: React.FC<SlidingImagePuzzleProps> = ({
+const SlidingImagePuzzle: FC<SlidingImagePuzzleProps> = ({
   imageUrl,
   width = 400,
   height = 400,
 }) => {
-  const tileCount = 16;
-  const gridSize = 4;
+  const tileCount = 25;
+  const gridSize = 5;
   const tileSize = width / gridSize;
 
   // Solved board: pieces 0 to 14 with the last one (index 15) empty (null)
@@ -80,7 +79,7 @@ const SlidingImagePuzzle: React.FC<SlidingImagePuzzleProps> = ({
   useEffect(() => {
     const isSolved = board.every((tile, i) => tile === solvedBoard[i]);
     if (isShuffled && isSolved) {
-      toast.success("Puzzle solved!");
+      // toast.success("Puzzle solved!");
     }
   }, [board, solvedBoard, isShuffled]);
 
@@ -156,7 +155,6 @@ export default function HomePage() {
   return (
     <div className="flex h-screen w-screen items-center justify-center">
       <SlidingImagePuzzle imageUrl="/feaky.png" width={400} height={400} />
-      <Toaster />
     </div>
   );
 }
