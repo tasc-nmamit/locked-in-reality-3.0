@@ -8,16 +8,11 @@ async function main() {
   console.log("Start seeding...");
 
   await db.$transaction(async (tx) => {
-    const user = await tx.user.findFirst({
-      where: {
-        email: "admin@incridea.lir.in",
-      },
-    });
-    if (!user) {
+    for (const user of ["admin", "team1", "team2", "team3", "team4", "team5"]) {
       await tx.user.create({
         data: {
-          email: "admin@incridea.lir.in",
-          password: await hashPassword("admin@123"),
+          email: user + "@incridea.lir.in",
+          password: await hashPassword(user+"@123"),
         },
       });
     }
