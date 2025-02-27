@@ -43,7 +43,7 @@ export default function Navbar() {
 
   return (
     <nav className="fixed left-1/2 top-2 z-50 w-full -translate-x-1/2 transform p-4 md:top-4">
-      <div className="relative mx-auto w-full max-w-7xl rounded-full bg-purple-500/30 p-4 px-8 backdrop-blur-sm">
+      <div className="relative mx-auto w-full max-w-7xl rounded-xl bg-purple-500/30 p-4 px-8 backdrop-blur-sm">
         <div className="flex h-full w-full flex-row items-center justify-between">
           <div
             className="bg-clip-text pr-2"
@@ -63,9 +63,9 @@ export default function Navbar() {
           <DestopNav />
           <MobileNav setOpen={setOpen} open={open} />
         </div>
-
-        <div
-          className={`absolute left-0 top-20 flex w-full flex-col gap-2 rounded-xl bg-purple-500/30 text-center text-white backdrop-blur-md transition-all duration-300 ${open ? "max-h-96 overflow-auto" : "max-h-0 overflow-hidden p-0"}`}
+      </div>
+      <div
+          className={`flex w-full flex-col gap-2 my-2 rounded-xl bg-purple-500/30 backdrop-blur-md text-center text-white transition-all duration-300 ${open ? "max-h-96 overflow-auto" : "max-h-0 overflow-hidden p-0"}`}
           style={{ transition: "max-height 0.3s ease-in-out" }}
         >
           <div className="flex flex-col justify-center gap-4 object-cover p-4">
@@ -106,7 +106,6 @@ export default function Navbar() {
             )}
           </div>
         </div>
-      </div>
     </nav>
   );
 }

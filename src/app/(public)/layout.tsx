@@ -3,6 +3,8 @@ import "~/styles/globals.css";
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 
+import Loader from "~/app/_components/layouts/loader";
+
 import { TRPCReactProvider } from "~/trpc/react";
 import { Toaster } from "~/components/ui/sonner";
 import PublicLayout from "~/app/_components/layouts/publicLayout";
@@ -17,6 +19,8 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+
+
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
       <body
@@ -24,6 +28,7 @@ export default function RootLayout({
         style={{ backgroundImage: "url('/background.jpg')" }}
       >
         <SessionProvider>
+          <Loader />
           <Toaster richColors position="top-center"/>
           <TRPCReactProvider>
             <PublicLayout>{children}</PublicLayout>

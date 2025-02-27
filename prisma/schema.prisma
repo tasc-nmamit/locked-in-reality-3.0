@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "cockroachdb"
   // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
   // Further reading:
   // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
@@ -71,7 +71,7 @@ model VerificationToken {
 }
 
 model AppSettings {
-  id     Int     @id @default(autoincrement()) // TODO - Int for cockroachdb
+  id     BigInt     @id @default(autoincrement()) // TODO - Int for cockroachdb
   round1 Boolean @default(false)
   round2 Boolean @default(false)
 
@@ -79,7 +79,7 @@ model AppSettings {
 }
 
 model Rounds {
-  id   Int    @id @default(autoincrement()) // TODO - Int for cockroachdb
+  id   BigInt    @id @default(autoincrement()) // TODO - Int for cockroachdb
   name String
   //   description String?
 
@@ -101,7 +101,7 @@ model Question {
 
   level Int @default(1)
 
-  roundId     Int // TODO - Int for cockroachdb
+  roundId     BigInt // TODO - BigInt for cockroachdb
   round       Rounds       @relation(fields: [roundId], references: [id], onDelete: Cascade)
   submissions Submission[]
 }
@@ -169,6 +169,7 @@ model QRCode {
 model Progress {
   id String @id @default(cuid())
   completed Boolean @default(false)
+  hintTaken Boolean @default(false)
   team User @relation(fields: [teamId], references: [id], onDelete: Cascade)
   qrCode QRCode @relation(fields: [qrCodeId], references: [id], onDelete: Cascade)
 
